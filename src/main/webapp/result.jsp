@@ -5,6 +5,27 @@
 <%@ page import="java.net.HttpURLConnection"%>
 <%@ page import="java.net.URL"%>
 <%!
+//XMLをHTMLに変換する関数
+public String xmlToHTML(String msg) {//引数：xmlファイルの内容
+	
+	return msg.replace("&", "&amp;")
+			.replace("\"", "&quot;")
+			.replace("<", "&lt;")
+			.replace(">", "&gt;")
+			.replace("'", "&#39;")
+			.replace("\n", "<br>\n")
+			.replace("response", "div")
+			.replace("location", "ul")
+			.replace("city", "li")
+			.replace("city-kana", "li")
+			.replace("town", "li")
+			.replace("town-kana", "li")
+			.replace("x type=&quot;decimal&quot;", "li")
+			.replace("y type=&quot;decimal&quot;", "li")
+			.replace("distance type=&quot;float&quot;", "li")
+			.replace("prefecture", "li")
+			.replace("postal", "li");
+}
 
 //緯度経度情報からHMTLを得る関数
 public String coordinatesToHTML(String[] coordinates_contents) {
@@ -29,9 +50,13 @@ public String coordinatesToHTML(String[] coordinates_contents) {
             msg += str;//文字列を追加する
         }
         br.close();//メモリを解放する
+        
+        //受け取ったテキスト（XML）をHTMLに変換する
+        msg = xmlToHTML(msg);
+        
 	} catch (Exception e) {//エラー時処理
 		System.out.println("e");
-		msg += "エラーが発生しました";
+		msg += "coordinatesToHTMLでエラーが発生しました";
 	}
 	
 	return msg;
@@ -49,11 +74,6 @@ String msg = ""; //画面に表示する文字列を格納する変数
 String coordinates_contents[] = {""};//緯度経度を格納する変数
 
 coordinates_contents = request.getParameterValues("coordinates"); //リクエストパラメータを取得する
-
-/*//String → double に変換し、coordinates_contents[]に緯度経度情報を格納する
-for(int i = 0; i < tmp.length; i++) {
-	coordinates_contents[i] = Double.parseDouble(tmp[i]);
-}*/
 
 //緯度経度情報を元に、住所を取得し、HTMLを得る
 msg += coordinatesToHTML(coordinates_contents);
