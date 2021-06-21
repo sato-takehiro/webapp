@@ -8,23 +8,21 @@
 //XMLをHTMLに変換する関数
 public String xmlToHTML(String msg) {//引数：xmlファイルの内容
 	
-	return msg.replace("&", "&amp;")
-			.replace("\"", "&quot;")
-			.replace("<", "&lt;")
-			.replace(">", "&gt;")
-			.replace("'", "&#39;")
-			.replace("\n", "<br>\n")
+	return msg.replace("\n", "<br>\n")
 			.replace("response", "div")
 			.replace("location", "ul")
-			.replace("city", "li")
-			.replace("city-kana", "li")
-			.replace("town", "li")
-			.replace("town-kana", "li")
-			.replace("x type=&quot;decimal&quot;", "li")
-			.replace("y type=&quot;decimal&quot;", "li")
-			.replace("distance type=&quot;float&quot;", "li")
-			.replace("prefecture", "li")
-			.replace("postal", "li");
+			.replace("city>", "li>")
+			.replace("city-kana>", "li>")
+			.replace("town>", "li>")
+			.replace("town-kana>", "li>")
+			.replace("<x type=\"decimal\">", "<li>")
+			.replace("<y type=\"decimal\">", "<li>")
+			.replace("</x>", "</li>")
+			.replace("</y>", "</li>")
+			.replace("<distance type=\"float\">", "<li>")
+			.replace("</distance>", "</li>")
+			.replace("prefecture>", "li>")
+			.replace("postal>", "li>");
 }
 
 //緯度経度情報からHMTLを得る関数
@@ -35,12 +33,12 @@ public String coordinatesToHTML(String X, String Y) {
 	
 	StringBuilder bf = new StringBuilder();//文字列結合するためのクラス
 	try{
-		//文字列結合(Format + X + Y)を行う
+		//文字列結合(Format + "&x=" + X + "&y=" + Y)を行う
 		bf.append(urlFormat);
 		bf.append("&x=" + X);
 		bf.append("&y=" + Y);
 		String url = bf.toString();
-		System.out.println("url" + url);
+		
 		BufferedReader br = null;//ファイルをまとめて読み込むためのクラス
 		
 		// URL(url) → 「url/」
