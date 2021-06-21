@@ -75,7 +75,7 @@ response.setCharacterEncoding("UTF-8");
 
 //変数定義
 String msg = ""; //画面に表示する文字列を格納する変数
-String X;//緯度経度を格納する変数
+String X;//緯度を格納する変数
 String Y;//経度を格納する変数
 
 X = request.getParameter("X"); //リクエストパラメータを取得する
