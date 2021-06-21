@@ -33,9 +33,14 @@ public String coordinatesToHTML(String X, String Y) {
 	String msg = ""; //画面に表示する文字列を格納する変数
 	String urlFormat = "https://geoapi.heartrails.com/api/xml?method=searchByGeoLocation";//APIのURLフォーマット
 	
-	//StringBuffer bf = new StringBuffer();//文字列を格納するためのクラス
+	StringBuilder bf = new StringBuilder();//文字列結合するためのクラス
 	try{
-		String url = String.format(urlFormat, X, Y);
+		//文字列結合(Format + X + Y)を行う
+		bf.append(urlFormat);
+		bf.append("&x=" + X);
+		bf.append("&y=" + Y);
+		String url = bf.toString();
+		System.out.println("url" + url);
 		BufferedReader br = null;//ファイルをまとめて読み込むためのクラス
 		
 		// URL(url) → 「url/」
