@@ -22,7 +22,8 @@ public String xmlToHTML(String msg) {//引数：xmlファイルの内容
 			.replace("<distance type=\"float\">", "<li>")
 			.replace("</distance>", "</li>")
 			.replace("prefecture>", "li>")
-			.replace("postal>", "li>");
+			.replace("postal>", "li>")
+			.replace("error>", "li>");
 }
 
 //緯度経度情報からHMTLを得る関数
