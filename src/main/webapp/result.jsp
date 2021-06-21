@@ -28,14 +28,14 @@ public String xmlToHTML(String msg) {//引数：xmlファイルの内容
 }
 
 //緯度経度情報からHMTLを得る関数
-public String coordinatesToHTML(String[] coordinates_contents) {
+public String coordinatesToHTML(String X, String Y) {
 	//変数定義
 	String msg = ""; //画面に表示する文字列を格納する変数
 	String urlFormat = "https://geoapi.heartrails.com/api/xml?method=searchByGeoLocation";//APIのURLフォーマット
 	
 	//StringBuffer bf = new StringBuffer();//文字列を格納するためのクラス
 	try{
-		String url = String.format(urlFormat,coordinates_contents[0],coordinates_contents[1]);
+		String url = String.format(urlFormat, X, Y);
 		BufferedReader br = null;//ファイルをまとめて読み込むためのクラス
 		
 		// URL(url) → 「url/」
@@ -71,12 +71,14 @@ response.setCharacterEncoding("UTF-8");
 
 //変数定義
 String msg = ""; //画面に表示する文字列を格納する変数
-String coordinates_contents[] = {""};//緯度経度を格納する変数
+String X;//緯度経度を格納する変数
+String Y;//経度を格納する変数
 
-coordinates_contents = request.getParameterValues("coordinates"); //リクエストパラメータを取得する
+X = request.getParameter("X"); //リクエストパラメータを取得する
+Y = request.getParameter("Y"); //リクエストパラメータを取得する
 
 //緯度経度情報を元に、住所を取得し、HTMLを得る
-msg += coordinatesToHTML(coordinates_contents);
+msg += coordinatesToHTML(X,Y);
 
 %>
 
