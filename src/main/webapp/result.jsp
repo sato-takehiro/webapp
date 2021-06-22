@@ -7,16 +7,11 @@
 <%@ page import="java.io.*,java.util.*,java.net.*" %>
 <%!
 
-//XMLのいくつかの文字をエスケープし，改行の前に<br>を付ける
-String prettyPrintXML(String s) {
-	if (s == null)
-		return "";
-	return s.replace("&", "&amp;")
-			.replace("\"", "&quot;")
-			.replace("<", "&lt;")
-			.replace(">", "&gt;")
-			.replace("'", "&#39;")
-			.replace("\n", "<br>\n");
+String escapeCell(String s) { //空白文字に対するエスケープ処理を行う関数
+    if (s == null || s.equals("")) { //文字列sがnull,空白であるなら、空白文字&nbsp;を返す
+	return "&nbsp;";
+    }
+    return s; //それ以外のとき、文字列sを返す
 }
 
 //XML、タグ名が指定されているとき、
@@ -57,9 +52,10 @@ public String[] GetCoordinates(String Prefectures, String Municipality) {
 	
 	StringBuilder bf = new StringBuilder();//文字列結合するためのクラス
 	try{
-		//文字列結合(Format + "&x=" + Prefectures)を行う
+		//文字列結合(Format + "&x=" + Prefectures + "&y=" + Municipality)を行う
 		bf.append(urlFormat);
 		bf.append("&prefecture=" + Prefectures);
+		bf.append("&city=" + Municipality);
 		String url = bf.toString();
 		
 		BufferedReader br = null;//ファイルをまとめて読み込むためのクラス
@@ -77,9 +73,7 @@ public String[] GetCoordinates(String Prefectures, String Municipality) {
     	  tmp += "&#" +Municipality.codePointAt(j) + ";";
       }
       Municipality = tmp;
-      System.out.println("Municipality:" + Municipality);
       
-      System.out.println("1");
     //1行ずつまとめてテキストを読み込む
       String str;
       int i = 0;
@@ -95,20 +89,9 @@ public String[] GetCoordinates(String Prefectures, String Municipality) {
       }
       br.close();//メモリを解放する
       
-      System.out.println("5");
-      System.out.println("msg:" + msg);
-      System.out.println("flag:" + flag);
-      
       //受け取ったテキスト（XML）の必要な部分(緯度経度情報)を取る関数
       Coordinates[0] = url_tag_name_XML(msg, "x");//緯度を取得
-      System.out.println("Coordinates[0]:" + Coordinates[0]);
       Coordinates[1] = url_tag_name_XML(msg, "y");//経度を取得
-      System.out.println("Coordinates[1]:" + Coordinates[1]);
-      
-      System.out.println("6");
-      System.out.println("msg:" + msg);
-      System.out.println("Coordinates[0]:" + Coordinates[0]);
-      System.out.println("Coordinates[1]:" + Coordinates[1]);
       
 	} catch (Exception e) {//エラー時処理
 		System.out.println("e");
@@ -180,24 +163,15 @@ String Prefectures;//都道府県名を格納する変数
 String Municipality;//市区町村名を格納する変数
 String tmp[];//一時変数
 
-X = request.getParameter("X"); //リクエストパラメータを取得する
-Y = request.getParameter("Y"); //リクエストパラメータを取得する
+X = escapeCell(request.getParameter("X")); //リクエストパラメータを取得する
+Y = escapeCell(request.getParameter("Y")); //リクエストパラメータを取得する
 Prefectures = request.getParameter("prefectures"); //リクエストパラメータを取得する
 Municipality = request.getParameter("cities"); //リクエストパラメータを取得する
-System.out.println("X:" + X);
-System.out.println("Y:" + Y);
-System.out.println("Prefectures:" + Prefectures);
-System.out.println("Municipality:" + Municipality);
 
 //都道府県・市区町村名から、その緯度経度情報を得る
-System.out.println("a");
 tmp = GetCoordinates(Prefectures, Municipality);
-System.out.println("b");
 anser_X = tmp[0];
-System.out.println("c");
 anser_Y = tmp[1];
-System.out.println("d");
-
 //答えの緯度経度情報とユーザの緯度経度情報から、反応を変える
 msg += ChangeReaction(X, Y, anser_X, anser_Y);
 
