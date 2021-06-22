@@ -31,7 +31,7 @@ String url_tag_name_XML(String xml, String tag_name){
 	try {
 		pos1 = xml.indexOf("<" + tag_name + " type=\"decimal\">");//開始タグが先頭から何文字目かを格納する
 		pos2 = xml.indexOf("</" + tag_name + ">");//終了タグが先頭から何文字目かを格納する
-	
+		
 		if(pos1 == -1 || pos2 == -1) {//もしタグがなかったら処理を変更する
 			msg += "タグ名が存在していません。<br>";
 			return msg;
@@ -70,10 +70,6 @@ public String[] GetCoordinates(String Prefectures, String Municipality) {
 		HttpURLConnection con = (HttpURLConnection)new URL(url).openConnection();
       con.setRequestMethod("GET");//リクエストのメソッドを指定
       br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8")); // テキストを取得する
-      //1行ずつまとめてテキストを読み込む
-      String str;
-      int i = 0;
-      boolean flag = false;
       
       String tmp = "";//一時的に文字列を格納する
       //Municipality を 一文字ずつ読み取り、10進数の実体文字参照に変換
@@ -84,8 +80,11 @@ public String[] GetCoordinates(String Prefectures, String Municipality) {
       System.out.println("Municipality:" + Municipality);
       
       System.out.println("1");
+    //1行ずつまとめてテキストを読み込む
+      String str;
+      int i = 0;
+      boolean flag = false;
       while((str = br.readLine()) != null){//1行のテキストを読み込む
-    	  //System.out.println("str:" + str);
     	  if(str.contains(Municipality) && flag == false) {
         	  i = 6;
         	  flag = true;
